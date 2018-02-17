@@ -10,19 +10,19 @@ public class CellFactory {
         this.hotelRent = hotelRent;
     }
 
-    public Cell getCell(CellType type, int amountToProcess) {
+    public Cell getCell(String type, int amountToProcess) {
         Cell cell = null;
         switch (type){
-            case EMPTY:
+            case "E":
                 cell = new Empty();
                 break;
-            case JAIL:
+            case "J":
                 cell = new Jail(amountToProcess);
                 break;
-            case TREASURE:
+            case "T":
                 cell = new Treasure(amountToProcess);
                 break;
-            case HOTEL:
+            case "H":
                 cell = new Hotel(amountToProcess, hotelRent);
         }
         return cell;

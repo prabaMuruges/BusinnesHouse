@@ -9,5 +9,8 @@ public class Empty extends Cell {
         super(0);
     }
 
-    public void process(Player player) {}
+    @Override
+    public boolean isCreditable() {
+        return false;
+    }
 }

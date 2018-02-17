@@ -1,31 +1,20 @@
 package com.company;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by praba on 17/02/18.
  */
 public class Board {
-    private ArrayList<Cell> cells;
-    private CellFactory cellFactory;
+    private List<Cell> cells;
 
-    public Board(ArrayList<Cell> cells, CellFactory cellFactory) {
+    public Board(List cells) {
         this.cells = cells;
-        this.cellFactory = cellFactory;
     }
 
-    public void addCells(CellType cellType, int amountToProcess) {
-        Cell cell = cellFactory.getCell(cellType, amountToProcess);
-
-        if(cell == null) {
-            throw new java.lang.RuntimeException("Please specify a valid Cell Type");
-        }
-
-        cells.add(cell);
-    }
-
-    public void move(Player player, int position) {
-        Cell cell = cells.get(position - 1);
-        cell.process(player);
+    public void process(Player player, int diceValue) {
+        int newPosition = player.getCellPosition() + diceValue;
+        Cell cellToMove = cells.get(newPosition - 1);
+        player.moveTo(cellToMove, newPosition);
     }
 }

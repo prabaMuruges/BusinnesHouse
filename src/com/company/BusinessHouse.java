@@ -2,39 +2,43 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class BusinessHouse {
 
     public static void main(String[] args) {
-        CellType[] cellTypesInBoard = { CellType.EMPTY, CellType.HOTEL, CellType.JAIL, CellType.TREASURE };
+        String[] cellTypes = { "E", "H", "J", "T" };
 
-        HashMap<CellType, Integer> cellTypeProcessAmount = new HashMap<>();
-        cellTypeProcessAmount.put(CellType.EMPTY, 0);
-        cellTypeProcessAmount.put(CellType.JAIL, 150);
-        cellTypeProcessAmount.put(CellType.HOTEL, 200);
-        cellTypeProcessAmount.put(CellType.TREASURE, 200);
+        HashMap<String, Integer> cellAmountMap = new HashMap<>();
+        cellAmountMap.put("E", 0);
+        cellAmountMap.put("H", 200);
+        cellAmountMap.put("J", 150);
+        cellAmountMap.put("T", 200);
 
-        Board board = new Board(new ArrayList(), new CellFactory(50));
+        CellFactory cellFactory = new CellFactory(50);
+        List cells = new ArrayList();
 
-        for (CellType cellType : cellTypesInBoard) {
-            board.addCells(cellType, cellTypeProcessAmount.get(cellType));
+        for (String type: cellTypes) {
+            cells.add(cellFactory.getCell(type, cellAmountMap.get(type)));
         }
+
+        Board board = new Board(cells);
 
         Player praba = new Player(1000);
         Player gracil = new Player(1000);
         Player kd = new Player(1000);
 
-        board.move(kd, 2);
-        board.move(kd, 3);
+        board.process(praba, 2);
+        board.process(praba, 1);
 
-        board.move(praba, 2);
-        board.move(praba, 3);
+        board.process(kd, 2);
+        board.process(kd, 1);
 
-        board.move(gracil, 2);
-        board.move(gracil, 3);
+        board.process(gracil, 2);
+        board.process(gracil, 1);
 
-        System.out.println("Praba's Amount: " + praba.getAmount());
-        System.out.println("KD's Amount: " + kd.getAmount());
-        System.out.println("Gracil's Amount: " + gracil.getAmount());
+        System.out.println("Praba's Amount: " + praba.getWorth());
+        System.out.println("KD's Amount: " + kd.getWorth());
+        System.out.println("Gracil's Amount: " + gracil.getWorth());
     }
 }

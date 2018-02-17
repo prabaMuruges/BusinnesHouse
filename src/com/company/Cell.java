@@ -4,15 +4,15 @@ package com.company;
  * Created by praba on 17/02/18.
  */
 public abstract class Cell {
-    private int amountToProcess;
+    private int value;
 
-    public Cell(int amountToProcess) {
-        this.amountToProcess = amountToProcess;
+    public Cell(int value) {
+        this.value = value;
     }
 
-    public int getAmountToProcess() {
-        return amountToProcess;
+    public int getValue() {
+        return value;
     }
 
-    public abstract void process(Player player);
+    public abstract boolean isCreditable();
 }

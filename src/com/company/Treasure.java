@@ -10,7 +10,7 @@ public class Treasure extends Cell {
     }
 
     @Override
-    public void process(Player player) {
-        player.setAmount(player.getAmount() + getAmountToProcess());
+    public boolean isCreditable() {
+        return true;
     }
 }
