@@ -1,12 +1,9 @@
 package com.company;
 
-/**
- * Created by praba on 17/02/18.
- */
 public class Treasure extends Cell {
 
-    public Treasure(int amountToProcess) {
-        super(amountToProcess);
+    public Treasure(int position, int amountToProcess) {
+        super(position, amountToProcess);
     }
 
     @Override

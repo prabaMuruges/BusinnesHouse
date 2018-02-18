@@ -1,13 +1,16 @@
 package com.company;
 
-/**
- * Created by praba on 17/02/18.
- */
 public abstract class Cell {
     private int value;
+    private int position;
 
-    public Cell(int value) {
+    public Cell(int position, int value) {
+        this.position = position;
         this.value = value;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public int getValue() {

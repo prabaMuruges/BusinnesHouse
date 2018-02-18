@@ -1,21 +1,24 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Created by praba on 17/02/18.
- */
-public class Player {
+public class Player implements Comparable<Player> {
+    private String name;
     private Wallet wallet;
-    private int cellPosition;
+    private Optional<Cell> currentCell;
+    private List<Hotel> hotels;
 
-    public Player(int amount) {
+    public Player(String name, int amount) {
+        this.name = name;
         this.wallet = new Wallet(amount);
-        this.cellPosition = 0;
+        this.currentCell = Optional.empty();
+        this.hotels = new ArrayList();
     }
 
-    public int getCellPosition() {
-        return cellPosition;
+    public Optional<Cell> getCurrentCell() {
+        return currentCell;
     }
 
     public void pay(Player payee, int amount) {
@@ -23,24 +26,38 @@ public class Player {
         payee.wallet.credit(amount);
     }
 
-    public void moveTo(Cell cell, int newPosition){
+    public void buy(Hotel hotel) {
+        if(getWorth() >= hotel.getValue()) {
+            wallet.debit(hotel.getValue());
+            hotel.makeOwner(this);
+            hotels.add(hotel);
+        }
+    }
+
+    public void moveTo(Cell cell){
         if (cell instanceof Hotel) {
-            handleOwnables((Hotel) cell);
+            if(!hotels.contains(cell)) {
+                handleOwnables((Hotel) cell);
+            }
         } else {
             handleNonOwnables(cell);
         }
-        cellPosition = newPosition;
+        currentCell = Optional.of(cell);
     }
 
     public int getWorth(){
         return wallet.getAmount();
     }
 
+    public int getNetWorth() {
+        return getWorth() + hotels.stream().mapToInt(hotel -> hotel.getValue()).sum();
+    }
+
     private void handleOwnables(Hotel hotel){
         if (hotel.hasOwner()) {
             pay(hotel.getOwner(), hotel.getRent());
         } else {
-            hotel.makeOwner(this);
+            buy(hotel);
         }
     }
 
@@ -50,5 +67,15 @@ public class Player {
         } else {
             wallet.debit(cell.getValue());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + this.name + " Worth: " + this.getNetWorth();
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return o.getNetWorth() - this.getNetWorth();
     }
 }

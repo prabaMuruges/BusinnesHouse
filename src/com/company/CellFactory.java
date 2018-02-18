@@ -1,8 +1,5 @@
 package com.company;
 
-/**
- * Created by praba on 17/02/18.
- */
 public class CellFactory {
     private int hotelRent;
 
@@ -10,20 +7,20 @@ public class CellFactory {
         this.hotelRent = hotelRent;
     }
 
-    public Cell getCell(String type, int amountToProcess) {
+    public Cell getCell(CellType type, int amountToProcess, int position) {
         Cell cell = null;
         switch (type){
-            case "E":
-                cell = new Empty();
+            case EMPTY:
+                cell = new Empty(position);
                 break;
-            case "J":
-                cell = new Jail(amountToProcess);
+            case JAIL:
+                cell = new Jail(position, amountToProcess);
                 break;
-            case "T":
-                cell = new Treasure(amountToProcess);
+            case TREASURE:
+                cell = new Treasure(position, amountToProcess);
                 break;
-            case "H":
-                cell = new Hotel(amountToProcess, hotelRent);
+            case HOTEL:
+                cell = new Hotel(position, amountToProcess, hotelRent);
         }
         return cell;
     }
