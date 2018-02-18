@@ -1,13 +1,8 @@
 package com.company;
 
 public class CellFactory {
-    private int hotelRent;
 
-    public CellFactory(int hotelRent) {
-        this.hotelRent = hotelRent;
-    }
-
-    public Cell getCell(CellType type, int amountToProcess, int position) {
+    public Cell getCell(CellType type, int amountToProcess, int position, int hotelRent) {
         Cell cell = null;
         switch (type){
             case EMPTY:

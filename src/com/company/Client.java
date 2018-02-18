@@ -7,31 +7,32 @@ import java.util.List;
 public class Client {
 
     public static void main(String[] args) {
-        // Processing Inputs
         InputProcessor inputs = new InputProcessor("input.txt");
         inputs.processFile();
 
-        // Creating cells
-        HashMap<CellType, Integer> cellValues = inputs.getCellValues();
-        CellFactory cellFactory = new CellFactory(inputs.getHotelRent());
-        List cells = new ArrayList();
-        int cellPosition = 1;
-        for (String type: inputs.getCells()) {
-            CellType cellType = CellType.findByAbbr(type);
-            cells.add(cellFactory.getCell(cellType, cellValues.get(cellType), cellPosition++));
-        }
-
-        Board board = new Board(cells);
-
-        // Creating Players
-        List players = new ArrayList<Player>();
-        for (int player = 1; player <= inputs.getNoOfPlayers(); player++) {
-            players.add(new Player("Player " + player, inputs.getInitialAmount()));
-        }
-
-        // Game
-        BusinessHouse game = new BusinessHouse(board, players, inputs.getDiceValues());
+        BusinessHouse game = new BusinessHouse(new Board(getCells(inputs)), getPlayers(inputs), inputs.readDiceValues());
         game.start();
         game.getResults();
+    }
+
+    private static List<Player> getPlayers(InputProcessor inputs) {
+        ArrayList<Player> players = new ArrayList<>();
+        for (int player = 1; player <= inputs.readNoOfPlayers(); player++) {
+            players.add(new Player("Player " + player, inputs.readInitialAmount()));
+        }
+        return players;
+    }
+
+    private static List<Cell> getCells(InputProcessor inputs) {
+        HashMap<CellType, Integer> cellValues = inputs.readCellValues();
+        CellFactory cellFactory = new CellFactory();
+        ArrayList<Cell> cells = new ArrayList<>();
+        int cellPosition = 1;
+
+        for (String type: inputs.readCellTypes()) {
+            CellType cellType = CellType.findByAbbr(type);
+            cells.add(cellFactory.getCell(cellType, cellValues.get(cellType), cellPosition++, inputs.readHotelRent()));
+        }
+        return cells;
     }
 }

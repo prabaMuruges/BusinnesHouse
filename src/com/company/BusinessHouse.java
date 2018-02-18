@@ -26,7 +26,7 @@ public class BusinessHouse {
 
     public void getResults(){
         Collections.sort(players);
-        players.forEach(player -> System.out.println(player));
+        players.forEach(System.out::println);
     }
 
 }
