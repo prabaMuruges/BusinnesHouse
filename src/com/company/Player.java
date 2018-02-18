@@ -44,11 +44,11 @@ public class Player implements Comparable<Player> {
         currentCell = Optional.of(cell);
     }
 
-    private int getWorth(){
+    public int getWorth(){
         return wallet.getAmount();
     }
 
-    private int getNetWorth() {
+    public int getNetWorth() {
         return getWorth() + hotels.stream().mapToInt(Cell::getValue).sum();
     }
 
@@ -70,7 +70,7 @@ public class Player implements Comparable<Player> {
 
     @Override
     public String toString() {
-        return "Name: " + this.name + " Worth: " + this.getNetWorth();
+        return this.name + " has total worth " + this.getNetWorth();
     }
 
     @Override

@@ -10,7 +10,8 @@ public class Client {
         InputProcessor inputs = new InputProcessor("input.txt");
         inputs.processFile();
 
-        BusinessHouse game = new BusinessHouse(new Board(getCells(inputs)), getPlayers(inputs), inputs.readDiceValues());
+        BusinessHouse game = new BusinessHouse(new Board(getCells(inputs))
+                , getPlayers(inputs), inputs.readDiceValues());
         game.start();
         game.getResults();
     }
@@ -30,8 +31,13 @@ public class Client {
         int cellPosition = 1;
 
         for (String type: inputs.readCellTypes()) {
-            CellType cellType = CellType.findByAbbr(type);
-            cells.add(cellFactory.getCell(cellType, cellValues.get(cellType), cellPosition++, inputs.readHotelRent()));
+            CellType cellType = CellType.findByAbbreviation(type);
+            cells.add(cellFactory.getCell(
+                    cellType,
+                    cellValues.get(cellType),
+                    cellPosition++,
+                    inputs.readHotelRent())
+            );
         }
         return cells;
     }

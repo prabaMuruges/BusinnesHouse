@@ -11,7 +11,11 @@ public enum CellType {
         this.value = value;
     }
 
-    public static CellType findByAbbr(final String abbr){
-        return Arrays.stream(values()).filter(value -> value.value.equals(abbr)).findFirst().orElse(null);
+    public static CellType findByAbbreviation(final String abbreviation){
+        return Arrays.stream(values())
+                .filter(value -> value.value.equals(abbreviation))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Cell Types should be among { E (Empty), J (Jail)," +
+                        " T (Treasure), H (Hotel)}"));
     }
 }

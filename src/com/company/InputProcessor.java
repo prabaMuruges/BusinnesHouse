@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class InputProcessor {
     private static final String NUMBER_OF_PLAYERS = "Number of Players";
@@ -36,8 +35,8 @@ public class InputProcessor {
 
     public void processFile() {
         HashMap<String, String> keyValues = new HashMap<>();
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            stream.forEach(line -> {
+        try {
+            Files.lines(Paths.get(fileName)).forEach(line -> {
                 String[] inputPair = line.trim().split(":");
                 String key = inputPair[0].trim();
                 validateKey(key);
@@ -77,10 +76,9 @@ public class InputProcessor {
         keyValues.forEach((key, value) -> {
             switch (key) {
                 case NUMBER_OF_PLAYERS:
-                    noOfPlayers = Integer.parseInt(value);
-                    if(noOfPlayers < 2) {
-                        throw new RuntimeException("Sorry! Bussiness should have atleast two players to play.");
-                    }
+                    int noOfPlayersFromFile = Integer.parseInt(value);
+                    validateNoOfPlayers(noOfPlayersFromFile);
+                    noOfPlayers = noOfPlayersFromFile;
                     break;
                 case CELLS:
                     cellTypes = value.split(",");
@@ -89,7 +87,11 @@ public class InputProcessor {
                     initialAmount = Integer.parseInt(value);
                     break;
                 case DICE_OUTPUT:
-                    diceValues = Arrays.stream(value.split(",")).mapToInt(Integer::parseInt).toArray();
+                    int[] diceValuesFromFile = Arrays.stream(value.split(","))
+                            .mapToInt(Integer::parseInt)
+                            .toArray();
+                    validateDiceValues(diceValuesFromFile);
+                    diceValues = diceValuesFromFile;
                     break;
                 case HOTEL_WORTH:
                     cellValues.put(CellType.HOTEL, Integer.parseInt(value));
@@ -104,6 +106,21 @@ public class InputProcessor {
                     cellValues.put(CellType.TREASURE, Integer.parseInt(value));
             }
         });
+    }
+
+    private void validateNoOfPlayers(int noOfPlayersFromFile) {
+        if(noOfPlayersFromFile < 2) {
+            throw new RuntimeException("BussinessHouse should have atleast two players to play.");
+        }
+    }
+
+    private void validateDiceValues(int[] diceValuesFromFile) {
+        OptionalInt invalidDiceValue = Arrays.stream(diceValuesFromFile)
+                .filter(val -> val < 2 || val > 12)
+                .findFirst();
+        if(invalidDiceValue.isPresent()){
+            throw new RuntimeException("Dice Output should be within 2 - 12");
+        }
     }
 
     private void validateKey(String key) {
